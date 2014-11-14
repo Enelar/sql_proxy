@@ -10,6 +10,7 @@ void program(boost::asio::io_service &io)
     dout << "On new client connection. ";
     if (error)
     {
+      dout << "ERROR: " << error.message();
       work = false;
       return;
     }
@@ -27,7 +28,7 @@ void program(boost::asio::io_service &io)
 
 void main()
 {
-  dout << "==Program startup" << "test";
+  dout << "==Program startup";
   boost::asio::io_service io;
   program(io);
   dout << "==Program exit";
