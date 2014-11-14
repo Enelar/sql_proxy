@@ -12,7 +12,6 @@ class open_port : boost::noncopyable, public std::enable_shared_from_this<open_p
   int port;
   semaphore exit_lock, ready_lock;
   future<int> accept_thread;
-  ip::tcp::acceptor accept_socket;
 
   // In whitch thread invoke OnNewConnection
   bool sync_call;

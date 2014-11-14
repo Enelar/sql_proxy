@@ -1,7 +1,7 @@
 #include "open_port.h"
 
 open_port::open_port(boost::asio::io_service &_io, int _port, bool _sync_call)
-  : io(_io), port(_port), sync_call(_sync_call), accept_socket(_io)
+  : io(_io), port(_port), sync_call(_sync_call)
 {
 }
 
@@ -37,7 +37,10 @@ void open_port::StartOtherThread()
 int open_port::OtherThread()
 {
   int status = 0;
+  dout << "Accept thread started";
 
+  using namespace boost::asio::ip;
+  tcp::acceptor accept_socket(io, tcp::endpoint(tcp::v6(), port));
   try
   {
     auto new_connection = make_shared<socket_type>(io);
