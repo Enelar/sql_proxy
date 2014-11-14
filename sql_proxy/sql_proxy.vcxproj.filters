@@ -8,6 +8,9 @@
     <ClCompile Include="open_port.cpp">
       <Filter>net</Filter>
     </ClCompile>
+    <ClCompile Include="debug_output.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="def.h" />
@@ -29,8 +32,14 @@
     <ClInclude Include="server_connection.h">
       <Filter>net</Filter>
     </ClInclude>
-    <ClInclude Include="socket.h">
+    <ClInclude Include="socket_handle.h">
       <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="debug_output.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="debug_output.hpp">
+      <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

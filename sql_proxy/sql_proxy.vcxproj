@@ -60,6 +60,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>BOOST_LIB_TOOLSET="vc140";_WIN32_WINNT=0x0603;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -75,6 +76,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>BOOST_LIB_TOOLSET="vc140";_WIN32_WINNT=0x0603;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -84,6 +86,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="debug_output.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="open_port.cpp" />
     <ClCompile Include="semaphore.cpp" />
@@ -92,11 +95,13 @@
     <ClInclude Include="client_connection.h" />
     <ClInclude Include="connection_group.h" />
     <ClInclude Include="connection_handler.h" />
+    <ClInclude Include="debug_output.h" />
+    <ClInclude Include="debug_output.hpp" />
     <ClInclude Include="def.h" />
     <ClInclude Include="open_port.h" />
     <ClInclude Include="semaphore.h" />
     <ClInclude Include="server_connection.h" />
-    <ClInclude Include="socket.h" />
+    <ClInclude Include="socket_handle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

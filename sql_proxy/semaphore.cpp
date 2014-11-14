@@ -4,7 +4,7 @@ using namespace std;
 
 semaphore::semaphore(bool strict) : is_strict(strict)
 {
-  TurnOn();
+  TurnOff();
 }
 
 semaphore::~semaphore()
