@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="semaphore.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="open_port.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="def.h" />
+    <ClInclude Include="semaphore.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="client_connection.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="connection_group.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="connection_handler.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="open_port.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="server_connection.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="socket.h">
+      <Filter>net</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="utils">
+      <UniqueIdentifier>{dde2979e-c6c2-4521-bd10-7aedc37304bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net">
+      <UniqueIdentifier>{bd8747c7-53bd-4297-b84e-ea7dcacdb0e1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
