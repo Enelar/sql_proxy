@@ -86,6 +86,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="connection_handler.cpp" />
     <ClCompile Include="debug_output.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="main_loop.cpp" />

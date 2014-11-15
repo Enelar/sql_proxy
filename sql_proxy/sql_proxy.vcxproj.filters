@@ -14,6 +14,9 @@
     <ClCompile Include="main_loop.cpp">
       <Filter>utils</Filter>
     </ClCompile>
+    <ClCompile Include="connection_handler.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="def.h" />
