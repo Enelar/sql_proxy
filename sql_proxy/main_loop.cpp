@@ -32,7 +32,8 @@ void main_loop::StartThread()
   auto listen = [this]()
   {
     getc(stdin); // Whoa what the hack!
-    flag = false;
+    dout << "Main loop exiting";
+    Stop();
   };
 
   thread = async(std::launch::async, listen);
