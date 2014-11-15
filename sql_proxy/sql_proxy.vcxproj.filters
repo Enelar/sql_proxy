@@ -11,6 +11,9 @@
     <ClCompile Include="debug_output.cpp">
       <Filter>utils</Filter>
     </ClCompile>
+    <ClCompile Include="main_loop.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="def.h" />
@@ -39,6 +42,9 @@
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="debug_output.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="main_loop.h">
       <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>

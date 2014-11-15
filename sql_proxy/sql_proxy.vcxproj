@@ -88,6 +88,7 @@
   <ItemGroup>
     <ClCompile Include="debug_output.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="main_loop.cpp" />
     <ClCompile Include="open_port.cpp" />
     <ClCompile Include="semaphore.cpp" />
   </ItemGroup>
@@ -102,6 +103,7 @@
     <ClInclude Include="semaphore.h" />
     <ClInclude Include="server_connection.h" />
     <ClInclude Include="socket_handle.h" />
+    <ClInclude Include="main_loop.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
