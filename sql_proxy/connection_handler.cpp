@@ -17,18 +17,3 @@ void connection_handler::Connect(boost::asio::io_service &io, const string &addr
   tcp::resolver resolver(io);
   connect(*handle, resolver.resolve({ addr, boost::lexical_cast<string>(port) }));
 }
-
-void connection_handler::BeginAsyncIO()
-{
-  access_lock.Lock();
-  if (io_sheduled)
-    return;
-
-  auto AsyncIOFunctor = [this]()
-  {
-  };
-
-  io_sheduled = true;
-  io_thread = async(std::launch::async, AsyncIOFunctor);
-  io_thread.wait_for(1ms);
-}

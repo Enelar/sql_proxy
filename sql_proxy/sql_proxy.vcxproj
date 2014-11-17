@@ -86,6 +86,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="connection_async_io.cpp" />
     <ClCompile Include="connection_handler.cpp" />
     <ClCompile Include="debug_output.cpp" />
     <ClCompile Include="main.cpp" />
@@ -95,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="client_connection.h" />
+    <ClInclude Include="connection_async_io.h" />
     <ClInclude Include="connection_group.h" />
     <ClInclude Include="connection_handler.h" />
     <ClInclude Include="debug_output.h" />

@@ -17,6 +17,9 @@
     <ClCompile Include="connection_handler.cpp">
       <Filter>net</Filter>
     </ClCompile>
+    <ClCompile Include="connection_async_io.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="def.h" />
@@ -49,6 +52,9 @@
     </ClInclude>
     <ClInclude Include="main_loop.h">
       <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="connection_async_io.h">
+      <Filter>net</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
