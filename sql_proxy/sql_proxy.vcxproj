@@ -86,6 +86,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="client_connection.cpp" />
     <ClCompile Include="connection_async_io.cpp" />
     <ClCompile Include="connection_async_io_getset.cpp" />
     <ClCompile Include="connection_handler.cpp" />

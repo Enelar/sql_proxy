@@ -1,7 +1,17 @@
 #pragma once
 
-#include "connection_handler.h"
+#include "connection_async_io.h"
+#include "server_connection.h"
 
-class client_connection : connection_handler
+struct client_connection : connection_async_io
 {
+  future<void> thread;
+  semaphore exit;
+
+  void Thread();
+public:
+  void SheduleThread();
+
+  client_connection(server_connection &);
+  server_connection &sc;
 };
