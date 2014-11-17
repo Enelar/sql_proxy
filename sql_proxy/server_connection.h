@@ -3,10 +3,22 @@
 #include <map>
 #include "connection_async_io.h"
 
-class server_connection : connection_async_io
+struct server_connection : connection_async_io
 {
-  map<int, string> answers;
-  int cur_task = 0, cur_id = 0;
 public:
-  void AskSomething(string question, function<void(string)> callback);
+  typedef function<void(string)> callback;
+  void AskSomething(string question, callback);
+
+  void SheduleThread();
+  ~server_connection();
+private:
+  void InvokeCallback(int id, const string &answer);
+  map<int, string> requests;
+  map<int, callback> handlers;
+  int cur_task = 0, cur_id = 0;
+
+  void AskingThread();
+  string SingleAsk(const string &);
+  future<void> asking_thread;
+  semaphore exit;
 };

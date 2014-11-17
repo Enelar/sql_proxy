@@ -87,12 +87,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="connection_async_io.cpp" />
+    <ClCompile Include="connection_async_io_getset.cpp" />
     <ClCompile Include="connection_handler.cpp" />
     <ClCompile Include="debug_output.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="main_loop.cpp" />
     <ClCompile Include="open_port.cpp" />
     <ClCompile Include="semaphore.cpp" />
+    <ClCompile Include="server_connection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="client_connection.h" />

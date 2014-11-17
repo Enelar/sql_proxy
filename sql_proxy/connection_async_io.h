@@ -4,6 +4,10 @@
 
 struct connection_async_io : connection_handler
 {
+  // TODO: worthy get/set
+  string ReadSomething();
+  void WriteSomething(const string &);
+
   void BeginAsyncIO();
 private:
   semaphore disable_io;

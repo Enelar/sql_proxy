@@ -20,6 +20,12 @@
     <ClCompile Include="connection_async_io.cpp">
       <Filter>net</Filter>
     </ClCompile>
+    <ClCompile Include="server_connection.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="connection_async_io_getset.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="def.h" />
