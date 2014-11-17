@@ -22,6 +22,8 @@ void connection_async_io::IOSheduller()
   // Forcing futures to start
   futures[0].wait_for(1ms);
   futures[1].wait_for(1ms);
+
+  // TODO: Catch exceptions
 }
 
 /*
@@ -34,6 +36,7 @@ void connection_async_io::ReadFunctor()
   bool reshedule = true, exit = false;
   static const int read_size = 1400;
   array<unsigned char, read_size> read_buffer;
+  boost::asio::streambuf buffer;
 
   auto Condition = [&exit](const boost::system::error_code&, size_t)
   {
@@ -60,7 +63,7 @@ void connection_async_io::ReadFunctor()
     {
       access_lock.Lock();
       reshedule = false;
-      async_read(*handle, read_buffer, Condition, Complete);
+      async_read(*handle, boost::asio::buffer(read_buffer), Condition, Complete);
     }
 
     if (disable_io.Status())
@@ -78,54 +81,27 @@ void connection_async_io::ReadFunctor()
 
 void connection_async_io::WriteFunctor()
 {
-  semaphore stack_lock; // need for lambda references
-  bool reshedule = true, exit = false;
-  vector<char> write_buffer;
-
-  auto Condition = [&exit](const boost::system::error_code&, size_t)
-  {
-    if (exit)
-      return false;
-    return true;
-  };
-
-  auto Complete = [&](const boost::system::error_code&error, size_t size)
-  {
-    access_lock.Lock();
-    reshedule = true;
-
-    if (error)
-      __asm int 0x3; // force debuggin
-    if (exit)
-      stack_lock.TurnOn();
-  };
+  boost::system::error_code error;
 
   while (1)
   {
     this_thread::sleep_for(1ms);
-    if (reshedule)
-    {
-      decltype(write_queue)::value_type next_message;
+    decltype(write_queue)::value_type next_message;
 
-      {
-        access_lock.Lock();
-        if (write_queue.size())
-          continue;
-        next_message = write_queue.front();
-        write_queue.pop_front();
-        //copy(write_queue.front().begin()
-      }
-      reshedule = false;
-      async_write(*handle, boost::asio::buffer(&write_buffer[0], write_buffer.size()), Condition, Complete);
+    {
+      access_lock.Lock();
+      if (write_queue.size())
+        continue;
+      next_message = write_queue.front();
+      write_queue.pop_front();
     }
+
+    write(*handle, boost::asio::buffer(next_message), error);
+
+    if (error)
+      throw error;
 
     if (disable_io.Status())
       break;
   }
-
-  if (reshedule)
-    return; // No lambda active
-  stack_lock.TurnOn();
-  exit = true;
-  stack_lock.Lock(); // Waiting for lambda to release
 }
