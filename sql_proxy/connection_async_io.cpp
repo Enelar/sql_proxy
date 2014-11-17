@@ -13,17 +13,20 @@ void connection_async_io::BeginAsyncIO()
 
 void connection_async_io::IOSheduller()
 {
-  future<void> futures[] =
-  {
-    async(launch::async, &connection_async_io::ReadFunctor, this),
-    async(launch::async, &connection_async_io::WriteFunctor, this)
-  };
-
-  // Forcing futures to start
-  futures[0].wait_for(1ms);
-  futures[1].wait_for(1ms);
-
   // TODO: Catch exceptions
+  {
+    future<void> futures[] =
+    {
+      async(launch::async, &connection_async_io::ReadFunctor, this),
+      async(launch::async, &connection_async_io::WriteFunctor, this)
+    };
+
+    // Forcing futures to start
+    futures[0].wait_for(1ms);
+    futures[1].wait_for(1ms);
+  }
+
+  io_sheduled = false;
 }
 
 /*
