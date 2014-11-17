@@ -11,17 +11,29 @@ int ASMHash(const T *obj)
   return reinterpret_cast<int>(obj);
 }
 
+pair<int, unique_ptr<client_connection>> ConstructClient(server_connection &s, socket_handle h)
+{
+  pair<int, unique_ptr<client_connection>> ret;
+
+  ret.second = make_unique<client_connection>(s);
+  auto p = ret.second.get();
+  ret.first = ASMHash<>(p);
+
+  p->handle = h;
+
+  return ret;
+}
+
 void program(boost::asio::io_service &io)
 {
-  server_connection server;
-  server.Connect(io, "127.0.0.1", 5432);
+  server_connection server(io, L"127.0.0.1", 5432);
 
   main_loop loop;
   map<int, unique_ptr<client_connection>> clients;
 
   auto t = make_shared<open_port>(io, 10000);
 
-  t->SetOnNewConnection([&](socket_handle, const boost::system::error_code& error)
+  t->SetOnNewConnection([&](socket_handle h, const boost::system::error_code& error)
   {
     dout << "On new client connection. ";
     if (error)
@@ -31,9 +43,7 @@ void program(boost::asio::io_service &io)
       return;
     }
 
-    auto client = make_unique<client_connection>(server);
-    auto hash = ASMHash<>(client.get());
-    clients[hash].reset(client.release());
+    clients.insert(ConstructClient(server, h));
   });
 
   while (loop.Run())

@@ -8,6 +8,8 @@ struct connection_async_io : connection_handler
   string ReadSomething();
   void WriteSomething(const string &);
 
+  function<void(connection_async_io &)> OnDisconnect;
+
   void BeginAsyncIO();
 private:
   semaphore disable_io;

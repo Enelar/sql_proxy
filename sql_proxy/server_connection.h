@@ -10,6 +10,8 @@ public:
   void AskSomething(string question, callback);
 
   void SheduleThread();
+
+  server_connection(boost::asio::io_service &io, const wstring addr, int port);
   ~server_connection();
 private:
   void InvokeCallback(int id, const string &answer);

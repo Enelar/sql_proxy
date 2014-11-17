@@ -1,5 +1,14 @@
 #include "server_connection.h"
 
+server_connection::server_connection(boost::asio::io_service &io, const wstring addr, int port)
+{
+  OnDisconnect = [&](connection_async_io &)
+  {
+    Connect(io, addr, port);
+  };
+  Connect(io, addr, port);
+}
+
 void server_connection::AskSomething(string question, function<void(string)> callback)
 {
   access_lock.Lock(); // TODO: compare and set id iteration
@@ -41,6 +50,7 @@ void server_connection::SheduleThread()
 
 server_connection::~server_connection()
 {
+  OnDisconnect.swap(decltype(OnDisconnect)());
   exit.TurnOn();
 }
 

@@ -27,6 +27,8 @@ void connection_async_io::IOSheduller()
   }
 
   io_sheduled = false;
+  if (OnDisconnect)
+    OnDisconnect(*this);
 }
 
 /*
