@@ -2,11 +2,37 @@
 
 server_connection::server_connection(boost::asio::io_service &io, const wstring addr, int port)
 {
-  OnDisconnect = [&](connection_async_io &)
-  {
-    Connect(io, addr, port);
+  auto AutoReconnect = [](connection_async_io *that)
+  { // Probably continiosly memleak, cause constructing lambdas every time
+    this_thread::sleep_for(1000ms);
+    if (that->OnDisconnect)
+      that->OnDisconnect(*that);
   };
-  Connect(io, addr, port);
+
+  OnDisconnect = [this, AutoReconnect, &io, addr, port](connection_async_io &me)
+  {
+    if (me.AsyncIOActive()) // Wait until future appear. Or we will block thread
+    {
+      dout << "Server connection: IO still active. Waiting";
+      thread(AutoReconnect, &me).detach();
+      return;
+    }
+
+    dout << "Server connection: Disconnected";
+    try
+    {
+      Connect(io, addr, port);
+      dout << "Server connection: Connected";
+      BeginAsyncIO();
+    }
+    catch (boost::system::system_error &e)
+    {
+      dout << "Auto reconnect failed cause of " << string(e.what());
+      thread(AutoReconnect, &me).detach();
+    }
+  };
+
+  OnDisconnect(*this);
 }
 
 void server_connection::AskSomething(string question, function<void(string)> callback)

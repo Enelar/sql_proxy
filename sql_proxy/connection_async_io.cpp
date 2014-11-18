@@ -95,7 +95,7 @@ void connection_async_io::WriteFunctor()
 
     {
       access_lock.Lock();
-      if (write_queue.size())
+      if (!write_queue.size())
         continue;
       next_message = write_queue.front();
       write_queue.pop_front();
@@ -109,4 +109,9 @@ void connection_async_io::WriteFunctor()
     if (disable_io.Status())
       break;
   }
+}
+
+bool connection_async_io::AsyncIOActive() const
+{
+  return io_sheduled;
 }

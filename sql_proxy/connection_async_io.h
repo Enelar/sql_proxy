@@ -11,6 +11,7 @@ struct connection_async_io : connection_handler
   function<void(connection_async_io &)> OnDisconnect;
 
   void BeginAsyncIO();
+  bool AsyncIOActive() const;
 private:
   semaphore disable_io;
   bool io_sheduled = false;
