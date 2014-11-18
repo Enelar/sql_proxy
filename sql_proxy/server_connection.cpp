@@ -4,7 +4,7 @@ server_connection::server_connection(boost::asio::io_service &io, const wstring 
 {
   auto AutoReconnect = [](connection_async_io *that)
   { // Probably continiosly memleak, cause constructing lambdas every time
-    this_thread::sleep_for(1000ms);
+    this_thread::sleep_for(10s);
     if (that->OnDisconnect)
       that->OnDisconnect(*that);
   };

@@ -13,6 +13,7 @@ void connection_async_io::BeginAsyncIO()
 
 void connection_async_io::IOSheduller()
 {
+  dout << "Connection async io started";
   // TODO: Catch exceptions
   {
     future<void> futures[] =
@@ -26,6 +27,7 @@ void connection_async_io::IOSheduller()
     futures[1].wait_for(1ms);
   }
 
+  dout << "Connection async io finished";
   io_sheduled = false;
   if (OnDisconnect)
     OnDisconnect(*this);
@@ -56,10 +58,14 @@ void connection_async_io::ReadFunctor()
     reshedule = true;
 
     if (error)
-      __asm int 0x3; // force debuggin
+    {
+      dout << "Read error " << error.message();
+      disable_io.TurnOn();
+    }
+
     read_queue.push_back({read_buffer.begin(), read_buffer.begin() + size});
     if (exit)
-      stack_lock.TurnOn();
+      stack_lock.TurnOff();
   };
 
   while (1)
@@ -95,16 +101,25 @@ void connection_async_io::WriteFunctor()
 
     {
       access_lock.Lock();
-      if (!write_queue.size())
-        continue;
-      next_message = write_queue.front();
-      write_queue.pop_front();
+      if (write_queue.size())
+      {
+        next_message = write_queue.front();
+        write_queue.pop_front();
+      }
+      else
+      {
+        this_thread::sleep_for(100ms);
+        next_message = "KEEPALIVE";
+      }
     }
 
     write(*handle, boost::asio::buffer(next_message), error);
 
     if (error)
-      throw error;
+    {
+      dout << "Writing failed " << error.message();
+      disable_io.TurnOn();
+    }
 
     if (disable_io.Status())
       break;
