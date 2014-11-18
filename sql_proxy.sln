@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sql_proxy", "sql_proxy\sql_
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "server", "server\server.vcxproj", "{B2981B05-483D-4ECC-9961-1F9123B0AF00}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "client", "client\client.vcxproj", "{8770A5C5-EAAC-4AB1-9B23-1E01802BE52B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -21,6 +23,10 @@ Global
 		{B2981B05-483D-4ECC-9961-1F9123B0AF00}.Debug|Win32.Build.0 = Debug|Win32
 		{B2981B05-483D-4ECC-9961-1F9123B0AF00}.Release|Win32.ActiveCfg = Release|Win32
 		{B2981B05-483D-4ECC-9961-1F9123B0AF00}.Release|Win32.Build.0 = Release|Win32
+		{8770A5C5-EAAC-4AB1-9B23-1E01802BE52B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8770A5C5-EAAC-4AB1-9B23-1E01802BE52B}.Debug|Win32.Build.0 = Debug|Win32
+		{8770A5C5-EAAC-4AB1-9B23-1E01802BE52B}.Release|Win32.ActiveCfg = Release|Win32
+		{8770A5C5-EAAC-4AB1-9B23-1E01802BE52B}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
