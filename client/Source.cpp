@@ -11,7 +11,7 @@ void program(boost::asio::io_service &io)
   cout << "Connecting" << endl;
   {
     tcp::iostream stream;
-    stream.connect("127.0.0.1", "10000");
+    stream.connect("127.0.0.1", "2345");
     cout << "Connected" << endl;
     stream << "SEND TEST" << endl;
     cout << "Wait answer" << endl;

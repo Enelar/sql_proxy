@@ -31,7 +31,7 @@ void program(boost::asio::io_service &io)
   main_loop loop;
   map<int, unique_ptr<client_connection>> clients;
 
-  auto t = make_shared<open_port>(io, 10000);
+  auto t = make_shared<open_port>(io, 2345);
 
   t->SetOnNewConnection([&](socket_handle h, const boost::system::error_code& error)
   {
@@ -49,7 +49,7 @@ void program(boost::asio::io_service &io)
   while (loop.Run())
   { // Causing low level io worker not to leave cpu at all
     // (resheduling all the time), causing virtual 100% cpu use.
-    io.run_one();
+    io.poll();
     std::this_thread::sleep_for(1ns);
   }
   dout << "Main cycle exit";

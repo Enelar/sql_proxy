@@ -28,7 +28,7 @@ void open_port::SetOnNewConnection(callback f)
 
 void open_port::StartOtherThread()
 {
-  auto binded_callback = std::bind(&open_port::OtherThread, shared_from_this());
+  auto binded_callback = std::bind(&open_port::OtherThread, this);
 
   accept_thread = async(std::launch::async, binded_callback);
   accept_thread.wait_for(1ms);
@@ -39,25 +39,31 @@ int open_port::OtherThread()
   int status = 0;
   dout << "Accept thread started";
 
+  socket_handle new_connection;
+  auto Reshedule = [&](const boost::system::error_code &e)
+  {
+    OnNewConnection(new_connection, e);
+    new_connection = nullptr;
+    ready_lock.TurnOn();
+  };
+
   using namespace boost::asio::ip;
   tcp::acceptor accept_socket(io, tcp::endpoint(tcp::v6(), port));
   try
   {
-    auto new_connection = make_shared<socket_type>(io);
 
     while (true)
     {
-      auto binded_callback = std::bind(OnNewConnection, std::ref(new_connection), std::placeholders::_1);
-      accept_socket.async_accept(*new_connection, binded_callback);
+      new_connection = make_shared<socket_type>(io);
+      ready_lock.TurnOff();
+      accept_socket.async_accept(*new_connection, Reshedule);
 
     loop:
       std::this_thread::sleep_for(100ms);
       if (!exit_lock.Status())
         break;
-      if (ready_lock.Status())
+      if (!ready_lock.Status())
         goto loop;
-
-      ready_lock.TurnOn();
     }
     dout << "Accept thread detect exit";
   }
