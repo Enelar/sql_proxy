@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.22013.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sql_proxy", "sql_proxy\sql_proxy.vcxproj", "{A0E8A1C6-4FB7-47A9-B2EF-535755F39938}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "server", "server\server.vcxproj", "{B2981B05-483D-4ECC-9961-1F9123B0AF00}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -15,6 +17,10 @@ Global
 		{A0E8A1C6-4FB7-47A9-B2EF-535755F39938}.Debug|Win32.Build.0 = Debug|Win32
 		{A0E8A1C6-4FB7-47A9-B2EF-535755F39938}.Release|Win32.ActiveCfg = Release|Win32
 		{A0E8A1C6-4FB7-47A9-B2EF-535755F39938}.Release|Win32.Build.0 = Release|Win32
+		{B2981B05-483D-4ECC-9961-1F9123B0AF00}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B2981B05-483D-4ECC-9961-1F9123B0AF00}.Debug|Win32.Build.0 = Debug|Win32
+		{B2981B05-483D-4ECC-9961-1F9123B0AF00}.Release|Win32.ActiveCfg = Release|Win32
+		{B2981B05-483D-4ECC-9961-1F9123B0AF00}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

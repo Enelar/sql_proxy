@@ -26,7 +26,7 @@ pair<int, unique_ptr<client_connection>> ConstructClient(server_connection &s, s
 
 void program(boost::asio::io_service &io)
 {
-  server_connection server(io, L"127.0.0.1", 6881);
+  server_connection server(io, L"127.0.0.1", 5432);
 
   main_loop loop;
   map<int, unique_ptr<client_connection>> clients;
