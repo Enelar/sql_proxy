@@ -45,13 +45,6 @@ void connection_async_io::ReadFunctor()
   array<unsigned char, read_size> read_buffer;
   boost::asio::streambuf buffer;
 
-  auto Condition = [&exit](const boost::system::error_code&, size_t)
-  {
-    if (exit)
-      return false;
-    return true;
-  };
-
   auto Complete = [&](const boost::system::error_code&error, size_t size)
   {
     access_lock.Lock();
@@ -63,7 +56,7 @@ void connection_async_io::ReadFunctor()
       disable_io.TurnOn();
     }
 
-    read_queue.push_back({read_buffer.begin(), read_buffer.begin() + size});
+    //read_queue.push_back({read_buffer.begin(), read_buffer.begin() + size});
     if (exit)
       stack_lock.TurnOff();
   };
@@ -74,7 +67,7 @@ void connection_async_io::ReadFunctor()
     {
       access_lock.Lock();
       reshedule = false;
-      async_read(*handle, boost::asio::buffer(read_buffer), Condition, Complete);
+      async_read(*handle, boost::asio::buffer(read_buffer), Complete);
     }
 
     if (disable_io.Status())

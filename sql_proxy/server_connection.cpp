@@ -9,7 +9,7 @@ server_connection::server_connection(boost::asio::io_service &io, const wstring 
       that->OnDisconnect(*that);
   };
 
-  OnDisconnect = [this, AutoReconnect, &io, addr, port](connection_async_io &me)
+  OnDisconnect = [&, addr, port](connection_async_io &me)
   {
     if (me.AsyncIOActive()) // Wait until future appear. Or we will block thread
     {
