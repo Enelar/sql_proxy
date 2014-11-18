@@ -26,7 +26,7 @@ pair<int, unique_ptr<client_connection>> ConstructClient(server_connection &s, s
 
 void program(boost::asio::io_service &io)
 {
-  server_connection server(io, L"127.0.0.1", 5432);
+  server_connection server(io, L"127.0.0.1", 6881);
 
   main_loop loop;
   map<int, unique_ptr<client_connection>> clients;
@@ -47,9 +47,10 @@ void program(boost::asio::io_service &io)
   });
 
   while (loop.Run())
-  {
-    io.run();
-    std::this_thread::sleep_for(1ms);
+  { // Causing low level io worker not to leave cpu at all
+    // (resheduling all the time), causing virtual 100% cpu use.
+    io.run_one();
+    std::this_thread::sleep_for(1ns);
   }
   dout << "Main cycle exit";
 

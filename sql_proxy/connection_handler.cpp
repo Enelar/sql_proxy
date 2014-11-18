@@ -13,7 +13,7 @@ void connection_handler::Connect(boost::asio::io_service &io, const wstring addr
 void connection_handler::Connect(boost::asio::io_service &io, const string &addr, int port)
 {
   access_lock.Lock();
-  *handle = tcp::socket(io);
+  handle.reset(new _MEMLEAK_ tcp::socket(io));
   tcp::resolver resolver(io);
   connect(*handle, resolver.resolve({ addr, boost::lexical_cast<string>(port) }));
 }
