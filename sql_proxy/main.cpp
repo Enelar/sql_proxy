@@ -15,11 +15,9 @@ pair<int, unique_ptr<client_connection>> ConstructClient(server_connection &s, s
 {
   pair<int, unique_ptr<client_connection>> ret;
 
-  ret.second = make_unique<client_connection>(s);
+  ret.second = make_unique<client_connection>(s, h);
   auto p = ret.second.get();
   ret.first = ASMHash<>(p);
-
-  p->handle = h;
 
   return ret;
 }

@@ -12,6 +12,6 @@ struct client_connection : connection_async_io
 public:
   void SheduleThread();
 
-  client_connection(server_connection &);
+  client_connection(server_connection &, socket_handle sh);
   server_connection &sc;
 };

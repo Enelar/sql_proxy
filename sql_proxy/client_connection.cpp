@@ -24,7 +24,10 @@ void client_connection::SheduleThread()
   thread.wait_for(1ms);
 }
 
-client_connection::client_connection(server_connection &_sc)
+client_connection::client_connection(server_connection &_sc, socket_handle sh)
   : sc(_sc)
 {
+  handle = sh;
+  SheduleThread();
+  BeginAsyncIO();
 }
