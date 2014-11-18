@@ -3,12 +3,15 @@
 #include "def.h"
 #include <iostream>
 
+#include "semaphore.h"
+
 // Crap code. Refactor required
 struct dout_type
 {
+  static semaphore sync;
   bool moved = false;
   ~dout_type();
-  dout_type() {};
+  dout_type();
   dout_type(const dout_type &) = delete;
   // Forcing cascade move
   dout_type(dout_type &&);

@@ -1,6 +1,7 @@
 #include "debug_output.h"
 
 dout_startup_type dout;
+semaphore dout_type::sync;
 
 #include <windows.h>
 
@@ -37,8 +38,19 @@ auto operator<<(dout_type &s, const string &obj)->dout_type &
 
 dout_type::~dout_type()
 {
-  if (!moved)
-    (*this) << '\n';
+  if (moved)
+    return;
+  (*this) << '\n';
+  sync.TurnOff();
+}
+
+#include <future>
+
+dout_type::dout_type()
+{
+  // Wait for single lock to occure
+  while (!sync.Move())
+    this_thread::sleep_for(1ms);
 }
 
 dout_type::dout_type(dout_type &&o)
