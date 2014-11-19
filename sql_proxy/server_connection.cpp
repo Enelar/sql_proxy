@@ -37,11 +37,11 @@ server_connection::server_connection(boost::asio::io_service &io, const wstring 
 
 void server_connection::AskSomething(string question, function<void(string)> callback)
 {
-  access_lock.Lock(); // TODO: compare and set id iteration
+  auto lock = access_lock.Lock(); // TODO: compare and set id iteration
   int askid = ++cur_id; // I dont know is it concurent safe, test required
-  dout << "Queue " + askid;
+  dout << "Queue " << askid;
 
-  access_lock.Lock();
+  //access_lock.Lock();
   requests[askid] = question;
   handlers[askid] = callback;
 }
@@ -60,7 +60,7 @@ void server_connection::InvokeCallback(int id, const string &answer)
   }
 
   {
-    access_lock.Lock();
+    auto lock = access_lock.Lock();
     handlers.erase(id);
   }
 

@@ -6,7 +6,7 @@ string connection_async_io::ReadSomething()
   decltype(read_queue) temp_queue;
 
   {
-    access_lock.Lock();
+    auto lock = access_lock.Lock();
     if (!read_queue.size())
       return "";
     // Crap code
@@ -21,6 +21,6 @@ string connection_async_io::ReadSomething()
 
 void connection_async_io::WriteSomething(const string &data)
 {
-  access_lock.Lock();
+  auto lock = access_lock.Lock();
   write_queue.push_back(data);
 }

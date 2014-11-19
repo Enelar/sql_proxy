@@ -17,7 +17,7 @@ open_port::~open_port()
 
 void open_port::SetOnNewConnection(callback f)
 {
-  ready_lock.Lock();
+  auto lock = ready_lock.Lock();
   OnNewConnection = f;
 
   if (exit_lock.Status())

@@ -2,7 +2,7 @@
 
 void connection_async_io::BeginAsyncIO()
 {
-  access_lock.Lock();
+  auto lock = access_lock.Lock();
   if (io_sheduled)
     return;
 
@@ -49,7 +49,7 @@ void connection_async_io::ReadFunctor()
 
   auto Complete = [&](const boost::system::error_code&error, size_t size)
   {
-    access_lock.Lock();
+    auto lock = access_lock.Lock();
     reshedule = true;
 
     if (error)
@@ -71,7 +71,7 @@ void connection_async_io::ReadFunctor()
   {
     if (reshedule)
     {
-      access_lock.Lock();
+      auto lock = access_lock.Lock();
       reshedule = false;
       start = chrono::system_clock::now();
 //      async_read(*handle, boost::asio::buffer(read_buffer), Complete);
