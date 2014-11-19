@@ -14,6 +14,7 @@ void program(boost::asio::io_service &io)
     stream.connect("127.0.0.1", "2345");
     cout << "Connected" << endl;
     stream << "SEND TEST" << endl;
+    stream.flush();
     cout << "Wait answer" << endl;
     cout << stream.rdbuf();
   }

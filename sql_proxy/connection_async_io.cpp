@@ -45,6 +45,8 @@ void connection_async_io::ReadFunctor()
   array<unsigned char, read_size> read_buffer;
   boost::asio::streambuf buffer;
 
+  
+
   auto Complete = [&](const boost::system::error_code&error, size_t size)
   {
     access_lock.Lock();
@@ -56,10 +58,14 @@ void connection_async_io::ReadFunctor()
       disable_io.TurnOn();
     }
 
-    //read_queue.push_back({read_buffer.begin(), read_buffer.begin() + size});
+    auto message = string{ read_buffer.begin(), read_buffer.begin() + size };
+    read_queue.push_back(message);
     if (exit)
       stack_lock.TurnOff();
   };
+
+  typedef decltype(chrono::system_clock::now()) timestamp;
+  timestamp start;
 
   while (1)
   {
@@ -67,8 +73,31 @@ void connection_async_io::ReadFunctor()
     {
       access_lock.Lock();
       reshedule = false;
-      async_read(*handle, boost::asio::buffer(read_buffer), Complete);
+      start = chrono::system_clock::now();
+//      async_read(*handle, boost::asio::buffer(read_buffer), Complete);
     }
+
+    boost::system::error_code er;
+    auto available = handle->available(er);
+    if (er)
+    {
+      dout << "Error at available " << er.message();
+      disable_io.TurnOn();
+      break;
+    }
+
+    if (!available)
+      start = chrono::system_clock::now();
+    else
+    {
+      if (chrono::system_clock::now() - start > 5s)
+      {
+        auto size = handle->receive(boost::asio::buffer(read_buffer));
+        Complete(er, size);
+      }
+    }
+
+
 
     if (disable_io.Status())
       break;
