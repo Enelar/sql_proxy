@@ -33,6 +33,7 @@ server_connection::server_connection(boost::asio::io_service &io, const wstring 
   };
 
   OnDisconnect(*this);
+  SheduleThread();
 }
 
 void server_connection::AskSomething(string question, function<void(string)> callback)

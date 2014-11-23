@@ -48,7 +48,7 @@ void program(boost::asio::io_service &io)
   { // Causing low level io worker not to leave cpu at all
     // (resheduling all the time), causing virtual 100% cpu use.
     io.poll();
-    std::this_thread::sleep_for(1ns);
+    std::this_thread::sleep_for(1ms);
   }
   dout << "Main cycle exit";
 

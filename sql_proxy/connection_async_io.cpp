@@ -38,7 +38,7 @@ void connection_async_io::IOSheduller()
  */
 
 void connection_async_io::ReadFunctor()
-{
+{ // TODO: Refactor into sync code
   semaphore stack_lock; // need for lambda references
   bool reshedule = true, exit = false;
   static const int read_size = 1400;
@@ -64,8 +64,9 @@ void connection_async_io::ReadFunctor()
       stack_lock.TurnOff();
   };
 
-  typedef decltype(chrono::system_clock::now()) timestamp;
-  timestamp start;
+  //typedef decltype() timestamp;
+  auto start = chrono::system_clock::now();
+  //timestamp start;
 
   while (1)
   {
@@ -74,7 +75,7 @@ void connection_async_io::ReadFunctor()
       auto lock = access_lock.Lock();
       reshedule = false;
       start = chrono::system_clock::now();
-//      async_read(*handle, boost::asio::buffer(read_buffer), Complete);
+
     }
 
     boost::system::error_code er;
@@ -90,6 +91,9 @@ void connection_async_io::ReadFunctor()
       start = chrono::system_clock::now();
     else
     {
+      auto test = chrono::system_clock::now() - start;
+      //dout << "TEST" << available << " " << start.time_since_epoch() << " " << test.count();
+           //dout << test;
       if (chrono::system_clock::now() - start > 5s)
       {
         auto size = handle->receive(boost::asio::buffer(read_buffer));
@@ -102,10 +106,10 @@ void connection_async_io::ReadFunctor()
     if (disable_io.Status())
       break;
 
-    this_thread::sleep_for(1ms);
+    this_thread::sleep_for(10ms);
   }
 
-  if (reshedule)
+  //if (reshedule)
     return; // No lambda active
   stack_lock.TurnOn();
   exit = true;
@@ -131,7 +135,7 @@ void connection_async_io::WriteFunctor()
       else
       {
         this_thread::sleep_for(100ms);
-        next_message = "KEEPALIVE";
+//        next_message = "KEEPALIVE";
       }
     }
 
