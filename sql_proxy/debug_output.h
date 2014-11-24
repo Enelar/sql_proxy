@@ -20,7 +20,8 @@ struct dout_type
 struct dout_startup_type
 {};
 
-extern dout_startup_type dout;
+#define dout (dout_static << __FUNCTION__ ":" << __LINE__ << "\t ")
+extern dout_startup_type dout_static;
 
 template<typename T>
 auto operator<<(dout_startup_type &, const T &)->dout_type;

@@ -1,6 +1,6 @@
 #include "debug_output.h"
 
-dout_startup_type dout;
+dout_startup_type dout_static;
 semaphore dout_type::sync;
 
 #include <windows.h>
