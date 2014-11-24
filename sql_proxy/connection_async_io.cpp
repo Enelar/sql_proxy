@@ -110,6 +110,9 @@ void connection_async_io::WriteFunctor()
     {
       dout << "Writing failed " << error.message();
       disable_io.TurnOn();
+
+      auto lock = access_lock.Lock();
+      write_queue.clear();
     }
 
     if (disable_io.Status())
