@@ -24,6 +24,7 @@ server_connection::server_connection(boost::asio::io_service &io, const wstring 
       Connect(io, addr, port);
       dout << "Server connection: Connected";
       BeginAsyncIO();
+      SheduleThread();
     }
     catch (boost::system::system_error &e)
     {
@@ -33,7 +34,6 @@ server_connection::server_connection(boost::asio::io_service &io, const wstring 
   };
 
   OnDisconnect(*this);
-  SheduleThread();
 }
 
 void server_connection::AskSomething(string question, function<void(string)> callback)
@@ -83,11 +83,12 @@ server_connection::~server_connection()
 
 void server_connection::AskingThread()
 {
+  dout << "Asking thread began";
   while (1)
   {
     this_thread::sleep_for(1ms);
 
-    if (exit.Status())
+    if (!AsyncIOActive())
       break;
     if (!requests.size())
       continue;
@@ -104,11 +105,10 @@ void server_connection::AskingThread()
       continue;
     }
 
-    if (exit.Status())
-      break;
     if (!AsyncIOActive())
-      break;
+      cur_task--;
   }
+  dout << "Asking thread break";
 }
 
 string server_connection::SingleAsk(const string &question)
@@ -119,13 +119,11 @@ string server_connection::SingleAsk(const string &question)
   while (true)
   {
     this_thread::sleep_for(1ms);
-    if (exit.Status())
+    if (!AsyncIOActive())
       break;
     auto ret = ReadSomething();
     if (ret.length())
       return ret;
-    if (!AsyncIOActive())
-      break;
   }
   return "";
 }
