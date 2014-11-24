@@ -33,87 +33,52 @@ void connection_async_io::IOSheduller()
     OnDisconnect(*this);
 }
 
-/*
- * Refactor: functions almost similar.
- */
-
 void connection_async_io::ReadFunctor()
-{ // TODO: Refactor into sync code
-  semaphore stack_lock; // need for lambda references
-  bool reshedule = true, exit = false;
+{
+  while (!disable_io.Status())
+  {
+    auto message = ReceiveCycle();
+
+    if (!message.length())
+      continue;
+
+    auto lock = access_lock.Lock();
+    read_queue.push_back(message);
+  }
+}
+
+string connection_async_io::ReceiveCycle()
+{
+  auto start = chrono::system_clock::now();
   static const int read_size = 1400;
   array<unsigned char, read_size> read_buffer;
-  boost::asio::streambuf buffer;
 
-  
-
-  auto Complete = [&](const boost::system::error_code&error, size_t size)
+  while (!disable_io.Status())
   {
-    auto lock = access_lock.Lock();
-    reshedule = true;
-
-    if (error)
-    {
-      dout << "Read error " << error.message();
-      disable_io.TurnOn();
-    }
-
-    auto message = string{ read_buffer.begin(), read_buffer.begin() + size };
-    read_queue.push_back(message);
-    if (exit)
-      stack_lock.TurnOff();
-  };
-
-  //typedef decltype() timestamp;
-  auto start = chrono::system_clock::now();
-  //timestamp start;
-
-  while (1)
-  {
-    if (reshedule)
-    {
-      auto lock = access_lock.Lock();
-      reshedule = false;
-      start = chrono::system_clock::now();
-
-    }
-
+    this_thread::sleep_for(10ms);
     boost::system::error_code er;
     auto available = handle->available(er);
+
     if (er)
     {
       dout << "Error at available " << er.message();
       disable_io.TurnOn();
-      break;
     }
 
     if (!available)
-      start = chrono::system_clock::now();
-    else
     {
-      auto test = chrono::system_clock::now() - start;
-      //dout << "TEST" << available << " " << start.time_since_epoch() << " " << test.count();
-           //dout << test;
-      if (chrono::system_clock::now() - start > 5s)
-      {
-        auto size = handle->receive(boost::asio::buffer(read_buffer));
-        Complete(er, size);
-      }
+      start = chrono::system_clock::now();
+      continue;
     }
 
+    if (chrono::system_clock::now() - start < 5s)
+      continue; // for demonstration purpouses
 
-
-    if (disable_io.Status())
-      break;
-
-    this_thread::sleep_for(10ms);
+    auto size = handle->receive(boost::asio::buffer(read_buffer));
+    return { read_buffer.begin(), read_buffer.begin() + size };
   }
 
-  //if (reshedule)
-    return; // No lambda active
-  stack_lock.TurnOn();
-  exit = true;
-  stack_lock.Lock(); // Waiting for lambda to release
+  return "";
 }
 
 void connection_async_io::WriteFunctor()

@@ -22,4 +22,6 @@ private:
   void IOSheduller();
   void ReadFunctor();
   void WriteFunctor();
+
+  string ReceiveCycle();
 };

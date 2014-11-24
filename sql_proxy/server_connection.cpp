@@ -95,19 +95,25 @@ void server_connection::AskingThread()
     auto key = requests.begin()->first;
     assert(++cur_task == key);
     auto question = requests[key];
-    requests.erase(key);
 
     auto answer = SingleAsk(move(question));
-    if (!answer.length())
-      if (exit.Status())
-        break;
-    InvokeCallback(key, move(answer));
+    if (answer.length())
+    {
+      requests.erase(key);
+      InvokeCallback(key, move(answer));
+      continue;
+    }
+
+    if (exit.Status())
+      break;
+    if (!AsyncIOActive())
+      break;
   }
 }
 
 string server_connection::SingleAsk(const string &question)
 {
-  // We NEED callback at this operatino
+  // We NEED callback at this operation
   WriteSomething(move(question));
 
   while (true)
@@ -118,6 +124,8 @@ string server_connection::SingleAsk(const string &question)
     auto ret = ReadSomething();
     if (ret.length())
       return ret;
+    if (!AsyncIOActive())
+      break;
   }
   return "";
 }
