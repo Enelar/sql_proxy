@@ -10,6 +10,8 @@ struct connection_async_io : connection_handler
 
   function<void(connection_async_io &)> OnDisconnect;
 
+  void ClearQueues( bool read = 1, bool write = 1 );
+
   void BeginAsyncIO();
   bool AsyncIOActive() const;
 private:

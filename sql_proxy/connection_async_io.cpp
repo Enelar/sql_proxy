@@ -6,6 +6,7 @@ void connection_async_io::BeginAsyncIO()
   if (io_sheduled)
     return;
 
+  disable_io.TurnOff();
   io_sheduled = true;
   io_thread = async(std::launch::async, &connection_async_io::IOSheduller, this);
   io_thread.wait_for(1ms);
@@ -14,6 +15,7 @@ void connection_async_io::BeginAsyncIO()
 void connection_async_io::IOSheduller()
 {
   dout << "Connection async io started";
+
   // TODO: Catch exceptions
   {
     future<void> futures[] =
@@ -110,9 +112,6 @@ void connection_async_io::WriteFunctor()
     {
       dout << "Writing failed " << error.message();
       disable_io.TurnOn();
-
-      auto lock = access_lock.Lock();
-      write_queue.clear();
     }
 
     if (disable_io.Status())
@@ -123,4 +122,11 @@ void connection_async_io::WriteFunctor()
 bool connection_async_io::AsyncIOActive() const
 {
   return io_sheduled;
+}
+
+void connection_async_io::ClearQueues(bool read, bool write)
+{
+  auto lock = access_lock.Lock();
+  read_queue.clear();
+  write_queue.clear();
 }

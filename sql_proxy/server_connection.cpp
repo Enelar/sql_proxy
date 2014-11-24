@@ -83,7 +83,12 @@ server_connection::~server_connection()
 
 void server_connection::AskingThread()
 {
+  while (!AsyncIOActive())
+    this_thread::sleep_for(1ms);
+
   dout << "Asking thread began";
+  ClearQueues();
+
   while (1)
   {
     this_thread::sleep_for(1ms);
