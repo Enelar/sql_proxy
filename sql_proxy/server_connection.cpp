@@ -23,8 +23,8 @@ server_connection::server_connection(boost::asio::io_service &io, const wstring 
     {
       Connect(io, addr, port);
       dout << "Server connection: Connected";
-      BeginAsyncIO();
       SheduleThread();
+      BeginAsyncIO();
     }
     catch (boost::system::system_error &e)
     {
